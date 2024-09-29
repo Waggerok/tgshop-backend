@@ -1,10 +1,14 @@
-const TelegramBot = require('node-telegram-bot-api');
+//Main imports
 require('dotenv').config();
 
-const webAppUrl = 'https://google.com';
 
+//Variables
+const TelegramBot = require('node-telegram-bot-api');
+const sequelize = require('./database');
+const webAppUrl = 'https://google.com';
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 
+//Bot controlling
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const text = msg.text;
