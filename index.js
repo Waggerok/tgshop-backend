@@ -5,7 +5,7 @@ require('dotenv').config();
 //Variables
 const TelegramBot = require('node-telegram-bot-api');
 const sequelize = require('./database');
-const webAppUrl = 'https://google.com';
+const webAppUrl = 'https://telegram-store.netlify.app';
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
 
 //Bot controlling
