@@ -1,18 +1,21 @@
 //Main imports
 require('dotenv').config();
 const express = require('express');
-
-//Variables
 const TelegramBot = require('node-telegram-bot-api');
 const sequelize = require('./database');
+const models = require('./models/models');
+const cors = require('cors');
+
+//Variables
 const webAppUrl = 'https://telegram-store.netlify.app';
 const bot = new TelegramBot(process.env.BOT_TOKEN, {polling: true});
-
-//App
-
 const PORT = process.env.PORT || 5000;
 
+//App
 const app = express();
+
+app.use(cors());
+app.use(express.json());
 
 const start = async () => {
     try {
