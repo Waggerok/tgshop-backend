@@ -23,7 +23,7 @@ const adminController = {
                 price,
                 quantity,
                 model3D,
-                image
+                img: image,
             });
 
             if (deviceInfo) {
@@ -64,8 +64,56 @@ const adminController = {
             console.error('Error while creating device:', error);
             res.status(500).json({ message : 'Server Error', error })
         }
-    }
+    },
 
+    getAllDevices : async (req,res) => {
+        try {
+            const devices = await Device.findAll();
+            res.status(200).json(devices);
+        }
+        catch(error) {
+            console.error('Error while fetching devices:', error);
+            res.status(500).json({ message: 'Server error', error });
+        }
+    },
+
+    updateDevice : async (req,res) => {
+        try {
+            const { id } = req.params; // Получаем id устройства из параметров
+            const { name, price, quantity, model3D, image } = req.body;
+
+            const device = await Device.findByPk(id);
+            if (!device) {
+                return res.status(400).json({ message: 'Device not found' })
+            };
+
+            await device.update({ name, price, quantity, model3D, img: image });
+            res.status(200).json(device);
+        }
+        catch(error) {
+            console.error('Error while updating device', error);
+            res.status(500).json({ message: 'Server error', error });
+        };
+    },
+
+    deleteDevice: async (req, res) => {
+        try {
+          const { id } = req.params; 
+    
+          
+          const device = await Device.findByPk(id);
+          if (!device) {
+            return res.status(404).json({ message: 'Device not found' });
+          }
+    
+          
+          await device.destroy();
+          res.status(204).send();
+        } catch (error) {
+          console.error('Error while deleting device:', error);
+          res.status(500).json({ message: 'Server error', error });
+        }
+      },
 }
 
 
