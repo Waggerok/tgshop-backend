@@ -1,5 +1,5 @@
-const Router = require('express');
-const router = new Router();
+// const Router = require('express');
+// const router = new Router();
 
 // router.get('/', deviceController.getAllDevices);
 // router.get('/:id', deviceController.getDeviceById);
@@ -7,4 +7,4 @@ const router = new Router();
 // router.patch('/:id', deviceController.updateDevice); // admin
 // router.delete('/:id', deviceController.deleteDevice); // admin
 
-module.exports = router;
+// module.exports = router;
