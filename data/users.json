@@ -1,0 +1,16 @@
+{
+  "waggerok": {
+    "telegramId": "waggerok",
+    "authorized_at": "2024-10-14T10:38:42.439Z",
+    "role": "user"
+  },
+  "undefined": {
+    "authorized_at": "2024-10-14T11:23:52.637Z",
+    "role": "user"
+  },
+  "waggerok_dev": {
+    "telegramId": "waggerok_dev",
+    "authorized_at": "2024-10-14T11:25:15.572Z",
+    "role": "user"
+  }
+}
