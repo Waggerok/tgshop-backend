@@ -1,39 +1,25 @@
-const fs = require('fs');
-const path = require('path');
+const { User } = require('../models/models');
 
-const users_file = path.join(__dirname, '../data/users.json');
+class UserController {
+    async authorizeUser(telegram_id, username) {
+        try {
+            // Проверяем, есть ли пользователь в базе данных
+            let user = await User.findOne({ where: { telegram_id } });
 
-const readUsers = () => {
-    if (!fs.existsSync(users_file)) {
-        console.log('Файл не найден')
-        return {};
-    }
-    const rawData = fs.readFileSync(users_file);
-    return JSON.parse(rawData);
-};
+            // Если пользователя нет, создаем его
+            if (!user) {
+                user = await User.create({ telegram_id, username });
+            }
 
-const writeUsers = (users) => {
-    const data = JSON.stringify(users,null,2);
-    fs.writeFileSync(users_file,data);
-    console.log('Данные успешно записаны в файл')
-};
+            // Логируем пользователя (можете использовать для отладки)
+            console.log(`User authorized: ${telegram_id}, username: ${username}`);
 
-const authorizeUser = (telegramId,role) => {
-    let users = readUsers();
-    role = 'user';
-    if(!users[telegramId]) {
-        users[telegramId] = {
-            telegramId: telegramId,
-            authorized_at : new Date().toISOString(),
-            role : role,
-        };
-        writeUsers(users);
-        console.log(`Пользователь с telegram_id : ${telegramId} успешно авторизован`)
-    } else {
-        console.log(`Пользователь с telegram_id: ${telegramId} уже существует в системе`)
+            return user;
+        } catch (error) {
+            console.error('Error during user authorization:', error);
+            throw error;
+        }
     }
 }
 
-module.exports = {
-    authorizeUser
-};
+module.exports = new UserController();
