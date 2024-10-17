@@ -5,6 +5,7 @@ const fs = require('fs');
 const sequelize = require('./data/database');
 const models = require('./models/models');
 const userRouter = require('./routes/userRouter');
+const orderRouter = require('./routes/orderRouter');
 
 //Variables
 const app = express();
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 //App
 app.use(express.json());
 app.use('/api/user', userRouter);
+app.use('/api', orderRouter);
 
 const start = async () => {
     try {
