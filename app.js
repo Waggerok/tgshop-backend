@@ -7,6 +7,7 @@ const models = require('./models/models');
 const userRouter = require('./routes/userRouter');
 const orderRouter = require('./routes/orderRouter');
 const deviceRouter = require('./routes/deviceRouter');
+const basketRouter = require('./routes/basketRouter');
 
 //Variables
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/user', userRouter);
 app.use('/api', orderRouter);
 app.use('/api/devices', deviceRouter);
+app.use('/api/basket', basketRouter);
 
 const start = async () => {
     try {
