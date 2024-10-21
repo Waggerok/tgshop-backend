@@ -30,27 +30,28 @@ class BasketController {
         };
     };
 
-    async addDeviceToBasket(req,res) {
+    async addDeviceToBasket(req, res) {
         try {
-            const {telegram_id, deviceId, quantity} = req.body;
-
-            let basket = await Basket.findOne({ where: {userTelegramId : telegram_id} });
-            if(!basket) {
-                basket = await Basket.create({ userTelegramId: telegram_id });
-            };
-
+            const { telegram_id, deviceId, quantity } = req.body;
+    
+            let basket = await Basket.findOne({ where: { userTelegramId: telegram_id } });
+            if (!basket) {
+                basket = await Basket.create({ userTelegramId: telegram_id, quantity:1 });
+            }
+    
             const basketDevice = await BasketDevice.create({
                 basketId: basket.id,
-                deviceId,
-                quantity,
+                deviceId: deviceId,
+                quantity: quantity,
             });
-
+    
             return res.status(201).json(basketDevice);
         } catch (error) {
-            console.error('Error adding device to basket', error);
-            return res.status(500).json({ message: 'Ошибка при добавлении устройства в корзину' });
-        };
-    };
+            console.error('Error adding device to basket:', error);
+            return res.status(500).json({ message: 'Ошибка при добавлении устройства в корзину', error });
+        }
+    }
+    
 
     async deleteDeviceFromBasket(req,res) {
         try {

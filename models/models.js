@@ -20,10 +20,6 @@ const Basket = sequelize.define('basket', {
     quantity : {type: DataTypes.INTEGER, allowNull: false},
 });
 
-const BasketDevice = sequelize.define('basket_device', {
-    id : {type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true},
-});
-
 const Device = sequelize.define('device', {
     id : {type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true},
     name : {type: DataTypes.STRING, unique: true, allowNull: false},
@@ -32,6 +28,11 @@ const Device = sequelize.define('device', {
     image : {type: DataTypes.STRING, allowNull: false},
     model3D : {type: DataTypes.STRING, allowNull: false},
     quantity : {type: DataTypes.INTEGER, allowNull: false}
+});
+
+const BasketDevice = sequelize.define('basket_device', {
+    id : {type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true},
+    deviceId : {type: DataTypes.INTEGER, allowNull: false, references: {model: Device, key: 'id'}}
 });
 
 const DeviceFilter = sequelize.define('device_filter', {
