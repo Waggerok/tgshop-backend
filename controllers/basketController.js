@@ -36,10 +36,12 @@ class BasketController {
     
             let basket = await Basket.findOne({ where: { userTelegramId: telegram_id } });
             if (!basket) {
-                basket = await Basket.create({ userTelegramId: telegram_id, quantity:1 });
-            }
+                basket = await Basket.create({ userTelegramId: telegram_id, quantity: 0});
+            };
+            basket.quantity += quantity;
+            await basket.save();
     
-            const basketDevice = await BasketDevice.create({
+            let basketDevice = await BasketDevice.create({
                 basketId: basket.id,
                 deviceId: deviceId,
                 quantity: quantity,
