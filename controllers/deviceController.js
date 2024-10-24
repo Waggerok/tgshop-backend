@@ -38,7 +38,9 @@ class DeviceController {
 
     async createDevice(req,res) {
         try {
-            const {name, description, price, image, model3D, quantity} = req.body;
+            const {name, description, price, quantity} = req.body;
+            const image = req.files.image ? req.files.image[0].filename : null;
+            const model3D = req.files.model3D ? req.files.model3D[0].filename : null
 
             if (!name || !description || !price || !image || !model3D || !quantity) {
                 return res.status(400).json({ message: 'Все поля должны быть заполнены' })
@@ -48,8 +50,8 @@ class DeviceController {
                 name,
                 description,
                 price,
-                image,
-                model3D,
+                image : `/uploads/images/${image}`,
+                model3D : `/uploads/models/${model3D}`,
                 quantity,
             });
 
