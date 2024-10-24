@@ -93,13 +93,15 @@ class BasketController {
             }
 
             await BasketDevice.destroy({ where: {basketId: basket.id} });
+
+            await Basket.destroy({ where: {id : basket.id} });
+
             return res.status(200).json({ message : 'Корзина очищена' })
         } catch (error) {
             console.error('Error clearing basket', error);
             return res.status(500).json({ message: 'Ошибка при очистке корзины', error });
         }
     }
-
 }
 
 module.exports = new BasketController();
