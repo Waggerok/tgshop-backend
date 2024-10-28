@@ -78,7 +78,10 @@ class DeviceController {
     async updateDevice(req,res) {
         try {
             const {id} = req.params;
-            const {name,description,price,image,model3D,quantity} = req.body;
+            const {name,description,price,quantity} = req.body;
+
+            const newImage = req.files?.image ? req.files.image[0].filename : null;
+            const newModel3D = req.files?.model3D ? req.files.model3D[0].filename : null;
 
             const device = await Device.findByPk(id);
 
@@ -86,15 +89,41 @@ class DeviceController {
                 return res.status(404).json({ message : 'Устройство не найдено' });
             };
 
+            console.log('Before Update:', device.toJSON());
+
+            const oldImagePath = device.image ? path.join(__dirname, '..', device.image) : null;
+            const oldModel3DPath = device.model3D ? path.join(__dirname, '..', device.model3D) : null;
+
+            console.log('New values', {
+                name,
+                description,
+                price,
+                image: newImage ? `/uploads/images/${newImage}` : device.image,
+                model3D: newModel3D ? `/uploads/images/${newModel3D}` : device.model3D,
+                quantity
+            })
+
             await device.update({
                 name,
                 description,
                 price,
-                image,
-                model3D,
+                image : newImage ? `/uploads/images/${newImage}` : device.image,
+                model3D : newModel3D ? `/uploads/models/${newModel3D}` : device.model3D,
                 quantity,
             });
-            res.status(200).json(device);
+            console.log('After Update:', await Device.findByPk(id)); 
+
+            if (newImage && oldImagePath && fs.existsSync(oldImagePath)) {
+                fs.unlinkSync(oldImagePath);
+            }
+            if (newModel3D && oldModel3DPath && fs.existsSync(oldModel3DPath)) {
+                fs.unlinkSync(oldModel3DPath);
+            }
+    
+            res.status(200).json({
+                device: device.toJSON(),
+                message: 'Устройство успешно обновлено',
+            });
         } catch (error) {
             console.error('Error updating device:', error);
             res.status(500).json({ message: 'Ошибка при обновлении устройства', error});
