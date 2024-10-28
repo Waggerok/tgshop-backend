@@ -105,6 +105,14 @@ class DeviceController {
         try {
             const {id} = req.params;
 
+            const device = await Device.findOne({ where: { id } });
+            if (!device) {
+                return res.status(404).json({ message : 'Устройство не найдено'})
+            };
+
+            const imagePath = path.join(__dirname, '..', device.image);
+            const model3DPath = path.join(__dirname, '..', device.model3D);
+
             const deletedRows = await Device.destroy({
                 where: { id: id }
             });
@@ -112,6 +120,14 @@ class DeviceController {
             if (!deletedRows === 0) {
                 return res.status(404).json({ message: 'Устройство не найдено' })
             };
+
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+            if (fs.existsSync(model3DPath)) {
+                fs.unlinkSync(model3DPath);
+            }
+    
 
             return res.status(200).json({ message: 'Устройство было успешно удалено' })
         } catch(error) {
