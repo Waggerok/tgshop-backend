@@ -1,5 +1,7 @@
 const {Device} = require('../models/models');
 const {Op} = require('sequelize');
+const path = require('path');
+const fs = require('fs')
 
 class DeviceController {
     async getAllDevices(req,res) {
@@ -39,22 +41,33 @@ class DeviceController {
     async createDevice(req,res) {
         try {
             const {name, description, price, quantity} = req.body;
-            const image = req.files.image ? req.files.image[0].filename : null;
-            const model3D = req.files.model3D ? req.files.model3D[0].filename : null
+            const image = req.files.image ? req.files.image[0] : null;
+            const model3D = req.files.model3D ? req.files.model3D[0] : null;
+
+            const existingDevice = await Device.findOne({ where: { name } });
+            if (existingDevice) {
+                return res.status(400).json({ message: 'Такое название устройства уже существует' });
+            }
 
             if (!name || !description || !price || !image || !model3D || !quantity) {
                 return res.status(400).json({ message: 'Все поля должны быть заполнены' })
             };
 
+            const imagePath = path.join(__dirname, '..', 'uploads', 'images', `${Date.now()}_${image.originalname}`);
+            const model3DPath = path.join(__dirname, '..', 'uploads', 'models', `${Date.now()}_${model3D.originalname}`);
+
+            fs.writeFileSync(imagePath, image.buffer);
+            fs.writeFileSync(model3DPath, model3D.buffer);
+           
             const newDevice = await Device.create({
                 name,
                 description,
                 price,
-                image : `/uploads/images/${image}`,
-                model3D : `/uploads/models/${model3D}`,
+                image: `/uploads/images/${path.basename(imagePath)}`,
+                model3D: `/uploads/models/${path.basename(model3DPath)}`,
                 quantity,
             });
-
+            
             res.status(201).json({ message : 'Устройство успешно создано', newDevice});
         } catch (error) {
             console.error('Error with creating device', error);
