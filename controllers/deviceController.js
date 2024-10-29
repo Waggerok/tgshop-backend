@@ -80,8 +80,8 @@ class DeviceController {
             const {id} = req.params;
             const {name,description,price,quantity} = req.body;
 
-            const newImage = req.files?.image ? req.files.image[0].filename : null;
-            const newModel3D = req.files?.model3D ? req.files.model3D[0].filename : null;
+            const newImageBuffer = req.files?.image ? req.files.image[0].buffer : null;
+            const newModel3DBuffer = req.files?.model3D ? req.files.model3D[0].buffer : null;
 
             const device = await Device.findByPk(id);
 
@@ -89,41 +89,33 @@ class DeviceController {
                 return res.status(404).json({ message : 'Устройство не найдено' });
             };
 
-            console.log('Before Update:', device.toJSON());
+            const newImagePath = newImageBuffer ? `/uploads/images/${Date.now()}-${req.files.image[0].originalname}` : device.image;
+            const newModel3DPath = newModel3DBuffer ? `/uploads/models/${Date.now()}-${req.files.model3D[0].originalname}` : device.model3D;
 
-            const oldImagePath = device.image ? path.join(__dirname, '..', device.image) : null;
-            const oldModel3DPath = device.model3D ? path.join(__dirname, '..', device.model3D) : null;
+            if (newImageBuffer) {
+                fs.writeFileSync(path.join(__dirname, '..', newImagePath), newImageBuffer);
+            }
+            if (newModel3DBuffer) {
+                fs.writeFileSync(path.join(__dirname, '..', newModel3DPath), newModel3DBuffer);
+            }
 
-            console.log('New values', {
-                name,
-                description,
-                price,
-                image: newImage ? `/uploads/images/${newImage}` : device.image,
-                model3D: newModel3D ? `/uploads/images/${newModel3D}` : device.model3D,
-                quantity
-            })
+            if (newImageBuffer && device.image && fs.existsSync(path.join(__dirname, '..', device.image))) {
+                fs.unlinkSync(path.join(__dirname, '..', device.image));
+            }
+            if (newModel3DBuffer && device.model3D && fs.existsSync(path.join(__dirname, '..', device.model3D))) {
+                fs.unlinkSync(path.join(__dirname, '..', device.model3D));
+            }
 
             await device.update({
                 name,
                 description,
                 price,
-                image : newImage ? `/uploads/images/${newImage}` : device.image,
-                model3D : newModel3D ? `/uploads/models/${newModel3D}` : device.model3D,
+                image : newImagePath,
+                model3D : newModel3DPath,
                 quantity,
             });
-            console.log('After Update:', await Device.findByPk(id)); 
-
-            if (newImage && oldImagePath && fs.existsSync(oldImagePath)) {
-                fs.unlinkSync(oldImagePath);
-            }
-            if (newModel3D && oldModel3DPath && fs.existsSync(oldModel3DPath)) {
-                fs.unlinkSync(oldModel3DPath);
-            }
     
-            res.status(200).json({
-                device: device.toJSON(),
-                message: 'Устройство успешно обновлено',
-            });
+            res.status(200).json(device.toJSON());
         } catch (error) {
             console.error('Error updating device:', error);
             res.status(500).json({ message: 'Ошибка при обновлении устройства', error});
