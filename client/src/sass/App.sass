@@ -1,0 +1,39 @@
+@import 'Variables.sass'
+
+body
+    box-sizing: border-box
+    background-color: #e5e5e5
+
+.App
+    padding: 100px
+
+.header
+    position: fixed
+    bottom: 0
+    height: 70px
+    width: 100%
+    background-color: #f1f1f1
+    // border: 1px solid #ffffff
+    border-top-left-radius: 16px
+    border-top-right-radius: 16px
+    &__navbar
+        display: flex
+        justify-content: center
+        &_links
+            display: flex
+            width: 100%
+            padding: 20px 30px
+            justify-content: space-between
+            list-style-type: none
+            &-item
+                a
+                    display: flex
+                    flex-direction: column
+                    justify-content: center
+                    align-items: center
+                    color: black
+                    text-decoration: none
+                    font-size: 14px
+            &-item.active
+                a
+                    color: $main-color
