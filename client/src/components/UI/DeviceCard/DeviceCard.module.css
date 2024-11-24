@@ -20,7 +20,7 @@
     width: 100%;
     img {
         border-radius: 25px;
-        width: 100%;
+        width: 80%;
     }
     
 }
@@ -28,14 +28,12 @@
 .card__items_title {
     margin-top: 10px;
     font-size: 14px;
-    text-transform:uppercase;
+    /* text-transform:uppercase; */
     padding: 2px 10px;
+    height: 100px;
 }
 
 .card__items_price {
-    margin-top: 50px;
-    padding: 1px 10px;
+    margin-top: 20px;
     font-size: 15px;
-    position: relative;
-    right: 20px;
 }
