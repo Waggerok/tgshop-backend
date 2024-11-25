@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import DeviceCard from '../components/UI/DeviceCard/DeviceCard';
 import DeviceList from '../components/DeviceList';
 import axios from 'axios';
 

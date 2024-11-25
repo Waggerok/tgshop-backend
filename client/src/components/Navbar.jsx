@@ -11,6 +11,7 @@ import { MdAdminPanelSettings } from "react-icons/md";
 const Navbar = () => {
 
     const [isAdmin, setIsAdmin] = useState(false);
+    console.log(setIsAdmin);
 
     const location = useLocation();
     const isActive = (path) => location.pathname === path;
