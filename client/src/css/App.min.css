@@ -56,4 +56,13 @@ body {
 }
 .header__navbar_links-item.active a {
   color: #0f5bdd;
+}
+
+.deviceList {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }/*# sourceMappingURL=App.min.css.map */
