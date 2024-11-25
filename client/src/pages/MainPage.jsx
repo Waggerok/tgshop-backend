@@ -23,6 +23,8 @@ const MainPage = () => {
             <div className="deviceList">
                 <DeviceList devices={devices}/>
             </div>
+
+            hello world
         </>
     );
 };
