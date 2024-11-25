@@ -18,7 +18,11 @@ const MainPage = () => {
     },[])
     return (
         <>
-            Main Page
+
+            <div className="start">
+                Main Page
+            </div>
+            
 
             <div className="deviceList">
                 <DeviceList devices={devices}/>
