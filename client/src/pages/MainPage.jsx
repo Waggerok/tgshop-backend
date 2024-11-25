@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DeviceList from '../components/DeviceList';
 import axios from 'axios';
 
-const src = 'http://localhost:5000/api/devices';
+const devicesSource = 'http://localhost:5000/api/devices';
 
 const MainPage = () => {
 
@@ -10,7 +10,7 @@ const MainPage = () => {
 
     useEffect(() => {
         axios
-            .get(src)
+            .get(devicesSource)
             .then((data) => {
                 console.log(data.data)
                 setDevices(data.data)
@@ -18,17 +18,12 @@ const MainPage = () => {
     },[])
     return (
         <>
-
-            <div className="start">
-                Main Page
-            </div>
+            Main Page
             
-
             <div className="deviceList">
                 <DeviceList devices={devices}/>
             </div>
 
-            hello world
         </>
     );
 };
