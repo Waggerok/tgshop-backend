@@ -3,19 +3,23 @@ version: '3.8'
 services:
   client:
     build:
-      context: ./client # Путь до директории с React
+      context: ./client
       dockerfile: Dockerfile
     ports:
-      - "3000:80"
+      - "443:443" # HTTPS для Telegram Mini Apps
     depends_on:
       - server
+    volumes:
+      - ./ssl:/etc/nginx/ssl # Папка с сертификатами для HTTPS
 
   server:
     build:
-      context: ./server # Путь до директории с Node.js
+      context: ./server
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
+    volumes:
+      - ./server/uploads:/app/uploads # Для хранения файлов
     ports:
       - "5000:5000"
     depends_on:
