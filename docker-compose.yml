@@ -4,7 +4,7 @@ services:
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     ports:
       - "443:443" # HTTPS для Telegram Mini Apps
     depends_on:
@@ -15,7 +15,7 @@ services:
   server:
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: dockerfile
     environment:
       - DATABASE_URL=postgresql://user:password@db:5432/mydatabase
     volumes:
